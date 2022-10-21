@@ -1,7 +1,7 @@
 import requests
 from pathlib import Path
 import os
-from supporting import picture_save, gives_the_file_extension
+from supporting import save_picture, get_the_file_extension
 from dotenv import load_dotenv
 
 
@@ -16,9 +16,9 @@ def downloading_nasa_photos():
     )
     response.raise_for_status()
     for number, url in enumerate(response.json()):
-        picture_save(
+        save_picture(
             url['url'], f'{directory_path}nasa_apod_{number}'
-            f'{gives_the_file_extension(url["url"])}'
+            f'{get_the_file_extension(url["url"])}'
         )
 
 

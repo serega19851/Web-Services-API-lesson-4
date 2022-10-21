@@ -1,7 +1,7 @@
 import requests
 from pathlib import Path
 import os
-from supporting import picture_save
+from supporting import save_picture
 import datetime
 from dotenv import load_dotenv
 
@@ -21,13 +21,13 @@ def downloading_epic_photos():
     response = requests.get(
         f"https://api.nasa.gov/EPIC/api/natural/date/{date}",
         params=params)
-    for number, metadata in enumerate(response.json()):
+    for number, filename in enumerate(response.json()):
         response = requests.get(
             f'https://api.nasa.gov/EPIC/archive/natural/'
-            f'{formatted_date}/png/{metadata["image"]}.png', params=params
+            f'{formatted_date}/png/{filename["image"]}.png', params=params
         )
         response.raise_for_status()
-        picture_save(response.url, f'{directory_path}nasa_epic_{number}.png')
+        save_picture(response.url, f'{directory_path}nasa_epic_{number}.png')
 
 
 if __name__ == '__main__':

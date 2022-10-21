@@ -1,6 +1,6 @@
 from pathlib import Path
 import os
-from supporting import picture_save, gives_the_file_extension
+from supporting import save_picture, get_the_file_extension
 import requests
 import argparse
 
@@ -12,29 +12,27 @@ def gets_spasex_id():
     return args.id
 
 
-def returns_references():
+def get_references():
+    id = ''
+    last_id = '5eb87d42ffd86e000604b384'
     if gets_spasex_id() is None:
-        response = requests.get(
-            f'https://api.spacexdata.com/v5/launches/5eb87d42ffd86e000604b384'
-        )
-        response.raise_for_status()
-        return response.json()['links']['flickr']['original']
-    response = requests.get(
-        f'https://api.spacexdata.com/v5/launches/{gets_spasex_id()}'
-    )
+        id += last_id
+    else:
+        id += gets_spasex_id()
+    response = requests.get(f'https://api.spacexdata.com/v5/launches/{id}')
     response.raise_for_status()
     return response.json()['links']['flickr']['original']
 
 
-def fetch_spacex_last_launch():
+def fetch_spacex_last_photographs():
     directory_path = os.path.join(os.path.dirname(__file__), 'images/')
     Path(directory_path).mkdir(parents=True, exist_ok=True)
-    for number, url in enumerate(returns_references()):
-        picture_save(
+    for number, url in enumerate(get_references()):
+        save_picture(
             url, f'{directory_path}spase_x_{number}'
-            f'{gives_the_file_extension(url)}'
+            f'{get_the_file_extension(url)}'
         )
 
 
 if __name__ == '__main__':
-    fetch_spacex_last_launch()
+    fetch_spacex_last_photographs()
