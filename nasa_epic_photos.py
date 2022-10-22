@@ -16,11 +16,13 @@ def downloading_epic_photos():
         "https://api.nasa.gov/EPIC/api/natural/images",
         params=params
     )
+    response_day.raise_for_status()
     date = datetime.datetime.fromisoformat(response_day.json()[-1]['date'])
     formatted_date = date.strftime("%Y/%m/%d")
     response = requests.get(
         f"https://api.nasa.gov/EPIC/api/natural/date/{date}",
         params=params)
+    response.raise_for_status()
     for number, filename in enumerate(response.json()):
         response = requests.get(
             f'https://api.nasa.gov/EPIC/archive/natural/'

@@ -3,6 +3,7 @@ import telegram
 import os
 from dotenv import load_dotenv
 import random
+from pathlib import Path
 
 
 def posting_photos_late():
@@ -15,7 +16,7 @@ def posting_photos_late():
         for images, dirs, files in os.walk('images'):
             random.shuffle(files)
             for name_file in files:
-                with open(f'images/{name_file}', 'rb') as file:
+                with open(Path('images', f'{name_file}'), 'rb') as file:
                     bot.send_document(chat_id=chat_id, document=file)
                 time.sleep(int(publication_frequency))
 
